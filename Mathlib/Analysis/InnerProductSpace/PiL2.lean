@@ -1082,6 +1082,33 @@ theorem DirectSum.IsInternal.subordinateOrthonormalBasis_subordinate (a : Fin n)
     hV.collectedOrthonormalBasis_mem hV' (fun i => stdOrthonormalBasis 𝕜 (V i))
       ((hV.sigmaOrthonormalBasisIndexEquiv hn hV').symm a)
 
+private def DirectSum.IsInternal.WIP_equiv
+    (hV' : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) {i : ι} :
+    {a : Fin n | hV.subordinateOrthonormalBasisIndex hn a hV' = i} ≃ Fin (finrank 𝕜 (V i)) where
+  toFun
+  | ⟨a, ha⟩ => Fin.cast
+      (show finrank 𝕜 (V ((hV.sigmaOrthonormalBasisIndexEquiv hn hV').symm a).fst) = finrank 𝕜 (V i)
+        by rw [←subordinateOrthonormalBasisIndex_def, ha])
+      ((hV.sigmaOrthonormalBasisIndexEquiv hn hV').symm a).2
+  invFun b := ⟨hV.sigmaOrthonormalBasisIndexEquiv hn hV' ⟨i, b⟩,
+    by simp [subordinateOrthonormalBasisIndex_def]⟩
+  left_inv a := by
+    ext
+    simp
+    sorry
+  right_inv b := sorry
+
+theorem DirectSum.IsInternal.exists_subordinateOrthonormalBasisIndex_eq'
+    (hV' : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) {i : ι} :
+    Finset.card {a : Fin n | hV.subordinateOrthonormalBasisIndex hn a hV' = i}
+    = Module.finrank 𝕜 (V i) := by
+  --have : {a : Fin n | hV.subordinateOrthonormalBasisIndex hn a hV' = i}
+  --  ≃ Fin (Module.finrank 𝕜 (V i)) := sorry
+  have : {a : Fin n | hV.subordinateOrthonormalBasisIndex hn a hV' = i}
+    ≃ Fin (Module.finrank 𝕜 (V i)) := sorry
+  simp_rw [subordinateOrthonormalBasisIndex_def]
+  sorry
+
 theorem DirectSum.IsInternal.exists_subordinateOrthonormalBasisIndex_eq
     (hV' : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) {i : ι} (hi : V i ≠ ⊥) :
     ∃ a : Fin n, hV.subordinateOrthonormalBasisIndex hn a hV' = i := by

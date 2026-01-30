@@ -189,14 +189,16 @@ public theorem injective_theorem : Function.Injective T
       simp [hz, ←T.sq_singularValues_of_lt rfl (Finset.mem_range.mp h)]]
     exact T.isSymmetric_adjoint_comp_self.hasEigenvalue_eigenvalues rfl ⟨i, Finset.mem_range.mp h⟩
 
--- Theorem which says number of positive singular values is rank(T)
--- Used to prove other two
--- Maybe best to first prove number of nonzero singular values is `n - rank(T)`
+-- Roadmap for next two theorems:
+-- 1. μ appears in (T*T).eigenvalues a number of times equal to the dimension of the eigenspace of μ
+-- 2. From 1., 0 appears in (T*T).eigenvalues a number of times equal to dim(ker(T))
+-- 3. From 2., 0 appears as a singular value `dim(ker(T*T))` (= `n - rank(T*T)`) times
+-- 4. From 3., the number of positive singular values is `rank(T*T) = rank(T)`
+-- 5. From 4. and the fact that singular values are antitone, the following two theroems follow
 
 public theorem singularValues_lt_rank {n : ℕ}
   (hn : n < Module.finrank 𝕜 (range T)) : 0 < T.singularValues n := by
-  -- Plan: rank(T) = range(T*T) = number of nonzero eigenvalues
-  -- Use Module.End.eigenspace_zero
+  -- First use that rank(T) = range(T*T) then apply reasoning above
   sorry
 
 -- It's unclear what the right way to state "The rank of T, as a natural number" is,
@@ -205,8 +207,6 @@ public theorem singularValues_lt_rank {n : ℕ}
 public theorem singularValues_rank
   : T.singularValues (Module.finrank 𝕜 (range T)) = 0 := by
   -- Potentially requires proof by cases on whether T is full-rank?
-  -- I think this is one of the hard ones. Might want to hold off on it until the theory of left
-  -- and right singular vectors has been developed.
   sorry
 
 public theorem singularValues_le_rank {n : ℕ}

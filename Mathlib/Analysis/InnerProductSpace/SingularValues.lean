@@ -193,10 +193,15 @@ public theorem injective_theorem
     rw [hi]
     simp
   · intro ⟨i, hi₁, hi₂⟩
-    --rw [←sq_eq_zero_iff] at hi₂
-    --rw [T.sq_singularValues_of_lt rfl (Finset.mem_range.mp hi₁)] at hi₂
+    have := T.sq_singularValues_of_lt rfl (Finset.mem_range.mp hi₁)
+    rw [hi₂] at this
+    simp only [coe_zero, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow] at this
+    symm at this
+    rw [←RCLike.ofReal_eq_zero (K := 𝕜)] at this
+    rw [←this]
+    exact T.isSymmetric_adjoint_comp_self.hasEigenvalue_eigenvalues rfl ⟨i, Finset.mem_range.mp hi₁⟩
+    --push_cast at this
     --rw [RCLike.ofReal_eq_zero] at hi₂
-    sorry
 
 public theorem singularValues_lt_rank {n : ℕ}
   (hn : n < Module.finrank 𝕜 (range T)) : 0 < T.singularValues n := by

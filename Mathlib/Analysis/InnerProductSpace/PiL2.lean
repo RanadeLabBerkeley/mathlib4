@@ -11,6 +11,8 @@ public import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 public import Mathlib.LinearAlgebra.UnitaryGroup
 public import Mathlib.Util.Superscript
 
+import Mathlib.Tactic.DepRewrite
+
 /-!
 # `L²` inner product space structure on finite products of inner product spaces
 
@@ -1095,12 +1097,15 @@ private def DirectSum.IsInternal.WIP_equiv
     simp
     rw [subordinateOrthonormalBasisIndex_def] at ha
     generalize_proofs h
+    rw! [←ha]
+    simp
+    /-
     have : (⟨i, Fin.cast h ((sigmaOrthonormalBasisIndexEquiv hn hV hV').symm a).snd⟩
       : Σ i : ι, Fin (finrank 𝕜 (V i)))
-      = ⟨i, Fin.cast h ((sigmaOrthonormalBasisIndexEquiv hn hV hV').symm a).snd⟩ := by
+      = ⟨, Fin.cast h ((sigmaOrthonormalBasisIndexEquiv hn hV hV').symm a).snd⟩ := by
       sorry
       --= ⟨((sigmaOrthonormalBasisIndexEquiv hn hV hV').symm a).fst, sorry⟩ := by
-    sorry
+      -/
   right_inv b := by
     ext
     dsimp only [Fin.val_cast]

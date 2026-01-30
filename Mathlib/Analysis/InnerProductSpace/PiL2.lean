@@ -1101,7 +1101,7 @@ private def DirectSum.IsInternal.subordinateOrthonormalBasisIndexFiberEquiv
     dsimp only [Fin.val_cast]
     rw [Equiv.symm_apply_apply]
 
-theorem DirectSum.IsInternal.card_setOf_subordinateOrthonormalBasisIndex_eq
+theorem DirectSum.IsInternal.card_filter_subordinateOrthonormalBasisIndex_eq
     (hV' : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) (i : ι) :
     Finset.card {a : Fin n | hV.subordinateOrthonormalBasisIndex hn a hV' = i}
     = finrank 𝕜 (V i) := by

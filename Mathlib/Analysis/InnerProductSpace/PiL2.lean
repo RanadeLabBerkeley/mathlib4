@@ -1085,18 +1085,26 @@ theorem DirectSum.IsInternal.subordinateOrthonormalBasis_subordinate (a : Fin n)
 private def DirectSum.IsInternal.WIP_equiv
     (hV' : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) {i : ι} :
     {a : Fin n | hV.subordinateOrthonormalBasisIndex hn a hV' = i} ≃ Fin (finrank 𝕜 (V i)) where
-  toFun
-  | ⟨a, ha⟩ => Fin.cast
-      (show finrank 𝕜 (V ((hV.sigmaOrthonormalBasisIndexEquiv hn hV').symm a).fst) = finrank 𝕜 (V i)
-        by rw [←subordinateOrthonormalBasisIndex_def, ha])
-      ((hV.sigmaOrthonormalBasisIndexEquiv hn hV').symm a).2
+  toFun a := Fin.cast (by rw [←subordinateOrthonormalBasisIndex_def, a.property])
+    ((hV.sigmaOrthonormalBasisIndexEquiv hn hV').symm a).snd
   invFun b := ⟨hV.sigmaOrthonormalBasisIndexEquiv hn hV' ⟨i, b⟩,
     by simp [subordinateOrthonormalBasisIndex_def]⟩
-  left_inv a := by
-    ext
+  left_inv := by
+    intro ⟨a, ha⟩
+    simp at ha
     simp
+    rw [subordinateOrthonormalBasisIndex_def] at ha
+    generalize_proofs h
+    have : (⟨i, Fin.cast h ((sigmaOrthonormalBasisIndexEquiv hn hV hV').symm a).snd⟩
+      : Σ i : ι, Fin (finrank 𝕜 (V i)))
+      = ⟨i, Fin.cast h ((sigmaOrthonormalBasisIndexEquiv hn hV hV').symm a).snd⟩ := by
+      sorry
+      --= ⟨((sigmaOrthonormalBasisIndexEquiv hn hV hV').symm a).fst, sorry⟩ := by
     sorry
-  right_inv b := sorry
+  right_inv b := by
+    ext
+    dsimp only [Fin.val_cast]
+    rw [Equiv.symm_apply_apply]
 
 theorem DirectSum.IsInternal.exists_subordinateOrthonormalBasisIndex_eq'
     (hV' : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) {i : ι} :

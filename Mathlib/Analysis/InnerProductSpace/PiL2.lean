@@ -1093,19 +1093,9 @@ private def DirectSum.IsInternal.WIP_equiv
     by simp [subordinateOrthonormalBasisIndex_def]⟩
   left_inv := by
     intro ⟨a, ha⟩
-    simp at ha
-    simp
-    rw [subordinateOrthonormalBasisIndex_def] at ha
-    generalize_proofs h
+    rw [mem_setOf_eq, subordinateOrthonormalBasisIndex_def] at ha
     rw! [←ha]
     simp
-    /-
-    have : (⟨i, Fin.cast h ((sigmaOrthonormalBasisIndexEquiv hn hV hV').symm a).snd⟩
-      : Σ i : ι, Fin (finrank 𝕜 (V i)))
-      = ⟨, Fin.cast h ((sigmaOrthonormalBasisIndexEquiv hn hV hV').symm a).snd⟩ := by
-      sorry
-      --= ⟨((sigmaOrthonormalBasisIndexEquiv hn hV hV').symm a).fst, sorry⟩ := by
-      -/
   right_inv b := by
     ext
     dsimp only [Fin.val_cast]

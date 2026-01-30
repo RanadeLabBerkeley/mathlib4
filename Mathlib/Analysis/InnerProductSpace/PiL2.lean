@@ -1084,16 +1084,16 @@ theorem DirectSum.IsInternal.subordinateOrthonormalBasis_subordinate (a : Fin n)
     hV.collectedOrthonormalBasis_mem hV' (fun i => stdOrthonormalBasis 𝕜 (V i))
       ((hV.sigmaOrthonormalBasisIndexEquiv hn hV').symm a)
 
-private def DirectSum.IsInternal.WIP_equiv
-    (hV' : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) {i : ι} :
-    {a : Fin n | hV.subordinateOrthonormalBasisIndex hn a hV' = i} ≃ Fin (finrank 𝕜 (V i)) where
+private def DirectSum.IsInternal.subordinateOrthonormalBasisIndexFiberEquiv
+    (hV' : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) (i : ι) :
+    {a : Fin n // hV.subordinateOrthonormalBasisIndex hn a hV' = i} ≃ Fin (finrank 𝕜 (V i)) where
   toFun a := Fin.cast (by rw [←subordinateOrthonormalBasisIndex_def, a.property])
     ((hV.sigmaOrthonormalBasisIndexEquiv hn hV').symm a).snd
   invFun b := ⟨hV.sigmaOrthonormalBasisIndexEquiv hn hV' ⟨i, b⟩,
     by simp [subordinateOrthonormalBasisIndex_def]⟩
   left_inv := by
     intro ⟨a, ha⟩
-    rw [mem_setOf_eq, subordinateOrthonormalBasisIndex_def] at ha
+    rw [subordinateOrthonormalBasisIndex_def] at ha
     rw! [←ha]
     simp
   right_inv b := by
@@ -1101,16 +1101,12 @@ private def DirectSum.IsInternal.WIP_equiv
     dsimp only [Fin.val_cast]
     rw [Equiv.symm_apply_apply]
 
-theorem DirectSum.IsInternal.exists_subordinateOrthonormalBasisIndex_eq'
-    (hV' : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) {i : ι} :
+theorem DirectSum.IsInternal.card_setOf_subordinateOrthonormalBasisIndex_eq
+    (hV' : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) (i : ι) :
     Finset.card {a : Fin n | hV.subordinateOrthonormalBasisIndex hn a hV' = i}
-    = Module.finrank 𝕜 (V i) := by
-  --have : {a : Fin n | hV.subordinateOrthonormalBasisIndex hn a hV' = i}
-  --  ≃ Fin (Module.finrank 𝕜 (V i)) := sorry
-  have : {a : Fin n | hV.subordinateOrthonormalBasisIndex hn a hV' = i}
-    ≃ Fin (Module.finrank 𝕜 (V i)) := sorry
-  simp_rw [subordinateOrthonormalBasisIndex_def]
-  sorry
+    = finrank 𝕜 (V i) := by
+  apply Finset.card_eq_of_equiv_fin
+  simpa using hV.subordinateOrthonormalBasisIndexFiberEquiv hn hV' i
 
 theorem DirectSum.IsInternal.exists_subordinateOrthonormalBasisIndex_eq
     (hV' : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) {i : ι} (hi : V i ≠ ⊥) :

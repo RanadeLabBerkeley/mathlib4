@@ -316,7 +316,7 @@ theorem eigenvectorBasis_apply_self_apply (hT : T.IsSymmetric) (hn : Module.finr
       hT.eigenvalues hn i * (hT.eigenvectorBasis hn).repr v i := by
   suffices
     ∀ w : EuclideanSpace 𝕜 (Fin n),
-      T ((hT.eigenvectorBasis hn).repr.symm w) =.revPerm
+      T ((hT.eigenvectorBasis hn).repr.symm w) =
         (hT.eigenvectorBasis hn).repr.symm (toLp 2 fun i ↦ hT.eigenvalues hn i * w i) by
     simpa [OrthonormalBasis.sum_repr_symm] using
       congr_arg (fun v => (hT.eigenvectorBasis hn).repr v i)

@@ -88,8 +88,8 @@ lemma range_adjoint_comp_self : range (adjoint T ∘ₗ T) = range (adjoint T) :
 /--
 Part of 7.64(d) from [axler2024]. See also `Module.finrank_range_adjoint_comp_self`.
 -/
-theorem _root_.Module.finrank_range_adjoint
-  : Module.finrank 𝕜 (range (adjoint T)) = Module.finrank 𝕜 (range T) := sorry
+theorem _root_.Module.finrank_range_adjoint :
+    Module.finrank 𝕜 (range (adjoint T)) = Module.finrank 𝕜 (range T) := sorry
 
 /--
 The singular values of a finite dimensional linear map, ordered in descending order.
@@ -176,7 +176,7 @@ are only dim(domain(T)) singular values in [axler2024], so we modify the stateme
 this.
 -/
 public theorem injective_theorem : Function.Injective T
-    ↔ 0 ∉ Finset.image T.singularValues (Finset.range (Module.finrank 𝕜 E)) := by
+    ↔ 0 ∉ (Finset.range (Module.finrank 𝕜 E)).image T.singularValues  := by
   have := (adjoint T ∘ₗ T).not_hasEigenvalue_zero_tfae.out 0 4
   rw [←injective_adjoint_comp_self_iff, ←ker_eq_bot, ←this, not_iff_not, Finset.mem_image]
   constructor

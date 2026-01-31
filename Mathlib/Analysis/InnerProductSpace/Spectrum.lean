@@ -264,8 +264,15 @@ theorem card_filter_eigenvalues_eq (hT : T.IsSymmetric) (hn : Module.finrank �
     (hμ : HasEigenvalue T μ) : Finset.card {i : Fin n | hT.eigenvalues hn i = μ}
       = Module.finrank 𝕜 (Module.End.eigenspace T μ) := by
   have h := hT.card_filter_unsortedEigenvalues_eq hn hμ
-  convert h using 2
-  sorry
+  --convert h using 1
+  rw [←h]
+  rw [eigenvalues_def]
+  apply Finset.card_equiv ((@Fin.revPerm n).trans (Tuple.sort (hT.unsortedEigenvalues hn)))
+  intro i
+  simp
+  --apply Finset.card_equiv (Fin.revPerm.trans (Tuple.sort (hT.unsortedEigenvalues hn)).symm)
+  --intro i
+  --simp
 
 theorem exists_eigenvalues_eq (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n) {μ : 𝕜}
     (hμ : HasEigenvalue T μ) : ∃ i : Fin n, hT.eigenvalues hn i = μ := by
@@ -316,7 +323,7 @@ theorem eigenvectorBasis_apply_self_apply (hT : T.IsSymmetric) (hn : Module.finr
       hT.eigenvalues hn i * (hT.eigenvectorBasis hn).repr v i := by
   suffices
     ∀ w : EuclideanSpace 𝕜 (Fin n),
-      T ((hT.eigenvectorBasis hn).repr.symm w) =
+      T ((hT.eigenvectorBasis hn).repr.symm w) =.revPerm
         (hT.eigenvectorBasis hn).repr.symm (toLp 2 fun i ↦ hT.eigenvalues hn i * w i) by
     simpa [OrthonormalBasis.sum_repr_symm] using
       congr_arg (fun v => (hT.eigenvectorBasis hn).repr v i)

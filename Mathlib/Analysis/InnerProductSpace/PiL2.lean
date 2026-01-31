@@ -1109,12 +1109,6 @@ theorem DirectSum.IsInternal.card_filter_subordinateOrthonormalBasisIndex_eq
   apply Finset.card_eq_of_equiv_fin
   simpa using hV.subordinateOrthonormalBasisIndexFiberEquiv hn hV' i
 
-theorem DirectSum.IsInternal.exists_subordinateOrthonormalBasisIndex_eq
-    (hV' : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) {i : ι} (hi : V i ≠ ⊥) :
-    ∃ a : Fin n, hV.subordinateOrthonormalBasisIndex hn a hV' = i := by
-  use hV.sigmaOrthonormalBasisIndexEquiv hn hV' ⟨i, ⟨0, by grind [finrank_eq_zero (S := V i)]⟩⟩
-  simp [subordinateOrthonormalBasisIndex_def]
-
 end SubordinateOrthonormalBasis
 
 end FiniteDimensional

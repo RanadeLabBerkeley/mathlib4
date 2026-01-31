@@ -217,15 +217,6 @@ private theorem card_filter_unsortedEigenvalues_eq (hT : T.IsSymmetric)
   rw [RCLike.conj_eq_iff_re.mp (hT.conj_eigenvalue_eq_self (μ := x.val) x.property)]
   aesop
 
-private theorem exists_unsortedEigenvalues_eq (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n)
-    {μ : 𝕜} (hμ : HasEigenvalue T μ) : ∃ i : Fin n, hT.unsortedEigenvalues hn i = μ := by
-  let (eq := hx) x : Eigenvalues T := ⟨μ, hμ⟩
-  obtain ⟨i, hi⟩ := hT.direct_sum_isInternal.exists_subordinateOrthonormalBasisIndex_eq hn
-    hT.orthogonalFamily_eigenspaces' (hasEigenvalue_iff.mp x.prop)
-  use i
-  rw [unsortedEigenvalues, hi, hx, Eigenvalues.val_mk, ← RCLike.conj_eq_iff_re,
-    hT.conj_eigenvalue_eq_self hμ]
-
 private noncomputable def unsortedEigenvectorBasis (hT : T.IsSymmetric)
     (hn : Module.finrank 𝕜 E = n) : OrthonormalBasis (Fin n) 𝕜 E :=
   hT.direct_sum_isInternal.subordinateOrthonormalBasis hn hT.orthogonalFamily_eigenspaces'
@@ -266,12 +257,6 @@ theorem card_filter_eigenvalues_eq (hT : T.IsSymmetric) (hn : Module.finrank �
   rw [←hT.card_filter_unsortedEigenvalues_eq hn hμ, eigenvalues_def]
   apply Finset.card_equiv (Fin.revPerm.trans (Tuple.sort (hT.unsortedEigenvalues hn)))
   simp
-
-theorem exists_eigenvalues_eq (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n) {μ : 𝕜}
-    (hμ : HasEigenvalue T μ) : ∃ i : Fin n, hT.eigenvalues hn i = μ := by
-  obtain ⟨i, hi⟩ := hT.exists_unsortedEigenvalues_eq hn hμ
-  use ((Tuple.sort (hT.unsortedEigenvalues hn)).symm i).revPerm
-  simp [eigenvalues_def, hi]
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in

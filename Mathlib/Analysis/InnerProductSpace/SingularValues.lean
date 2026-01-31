@@ -235,14 +235,15 @@ theorem singularValues_zero (i : ℕ) : (0 : E →ₗ[𝕜] F).singularValues i 
   apply singularValues_le_rank
   trans 0 <;> simp
 
-/--
-Use `LinearMap.singularValues_of_finrank_le` for the rest of the characterization of the singular
-values of the identity map.
+public theorem singularValues_id_apply_of_lt_finrank {i : ℕ} (hi : i < Module.finrank 𝕜 E)
+  : (LinearMap.id : E →ₗ[𝕜] E).singularValues i = 1 := sorry
 
-TODO: Not sure if should be phrased in terms of `1` or `id` or `LinearEquiv.refl`.
--/
-public theorem singularValues_one_of_lt_finrank {i : ℕ} (hi : i < Module.finrank 𝕜 E)
-  : (1 : E →ₗ[𝕜] E).singularValues i = 1 := sorry
+public theorem singularValues_id_apply {i : ℕ} :
+  (LinearMap.id : E →ₗ[𝕜] E).singularValues i = if i < Module.finrank 𝕜 E then 1 else 0 := by
+  split_ifs with h
+  · exact singularValues_id_apply_of_lt_finrank h
+  · push_neg at h
+    exact singularValues_of_finrank_le id h
 
 @[simp]
 public theorem singularValues_smul (c : 𝕜) (i : ℕ)

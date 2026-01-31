@@ -68,12 +68,17 @@ lemma orthogonal_ker : (ker T)ᗮ = range (adjoint T) := by
 lemma IsSymmetric.orthogonal_ker {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) : (ker T)ᗮ = range T := by
   simp [←hT.orthogonal_range]
 
--- TODO: Try an alternative phrasing in terms of Set.range (hT.eigenvalues hn) = {...}
--- Although I'm not sure how this would deal with 𝕜 vs ℝ
+-- Will become available in #34362
 lemma IsSymmetric.exists_eigenvalues_eq {T : Module.End 𝕜 E} (hT : T.IsSymmetric) {n : ℕ}
   (hn : Module.finrank 𝕜 E = n) {μ : 𝕜} (hμ : T.HasEigenvalue μ)
   : ∃ i : Fin n, hT.eigenvalues hn i = μ := by
   sorry
+
+-- Will become available in #34660
+theorem IsSymmetric.card_filter_eigenvalues_eq {T : Module.End 𝕜 E} {n : ℕ} (hT : T.IsSymmetric)
+    (hn : Module.finrank 𝕜 E = n) {μ : 𝕜} (hμ : T.HasEigenvalue μ) :
+    Finset.card {i : Fin n | hT.eigenvalues hn i = μ}
+    = Module.finrank 𝕜 (Module.End.eigenspace T μ) := sorry
 
 /--
 7.64(c) in [axler2024].

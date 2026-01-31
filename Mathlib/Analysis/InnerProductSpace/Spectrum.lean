@@ -206,8 +206,8 @@ private noncomputable def unsortedEigenvalues (hT : T.IsSymmetric) (hn : Module.
     hT.orthogonalFamily_eigenspaces').val
 
 private theorem card_filter_unsortedEigenvalues_eq (hT : T.IsSymmetric)
-    (hn : Module.finrank 𝕜 E = n) {μ : 𝕜} (hμ : HasEigenvalue T μ)
-    : Finset.card {i : Fin n | hT.unsortedEigenvalues hn i = μ}
+    (hn : Module.finrank 𝕜 E = n) {μ : 𝕜} (hμ : HasEigenvalue T μ) :
+    Finset.card {i : Fin n | hT.unsortedEigenvalues hn i = μ}
       = Module.finrank 𝕜 (Module.End.eigenspace T μ) := by
   convert hT.direct_sum_isInternal.card_filter_subordinateOrthonormalBasisIndex_eq hn
     hT.orthogonalFamily_eigenspaces' ⟨μ, hμ⟩ with i

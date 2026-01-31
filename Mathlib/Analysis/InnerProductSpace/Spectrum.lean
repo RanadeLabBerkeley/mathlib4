@@ -209,40 +209,13 @@ private theorem card_filter_unsortedEigenvalues_eq (hT : T.IsSymmetric)
     (hn : Module.finrank 𝕜 E = n) {μ : 𝕜} (hμ : HasEigenvalue T μ)
     : Finset.card {i : Fin n | hT.unsortedEigenvalues hn i = μ}
       = Module.finrank 𝕜 (Module.End.eigenspace T μ) := by
-  obtain h := hT.direct_sum_isInternal.card_filter_subordinateOrthonormalBasisIndex_eq hn
-    hT.orthogonalFamily_eigenspaces' ⟨μ, hμ⟩
-  --have h₁ := hT.conj_eigenvalue_eq_self
-  simp at h
-  rw [←h]
-  congr! with i
+  convert hT.direct_sum_isInternal.card_filter_subordinateOrthonormalBasisIndex_eq hn
+    hT.orthogonalFamily_eigenspaces' ⟨μ, hμ⟩ with i
   rw [unsortedEigenvalues]
-  rw [RCLike.conj_eq_iff_re.mp (hT.conj_eigenvalue_eq_self _)]
-  · aesop
-  · sorry
-
-  /-
-  -- This is not sufficient
-  --have : ↑(RCLike.re μ) = μ := sorry
-  rw [Subtype.ext_iff]
-  simp
-  constructor
-  · intro h₁
-
-    sorry
-  · sorry
-
-  --nth_rw 1 [←this]
-  --simp
-
-  /-
-  simp_rw [unsortedEigenvalues]
-  have (y : 𝕜) : ↑(RCLike.re y) = μ ↔ y = μ := sorry
-  simp_rw [this]
-  convert h
+  set x := hT.direct_sum_isInternal.subordinateOrthonormalBasisIndex hn i
+    hT.orthogonalFamily_eigenspaces'
+  rw [RCLike.conj_eq_iff_re.mp (hT.conj_eigenvalue_eq_self (μ := x.val) x.property)]
   aesop
-  -- rw [← RCLike.conj_eq_iff_re (K := 𝕜)]
-  -/
-  -/
 
 private theorem exists_unsortedEigenvalues_eq (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n)
     {μ : 𝕜} (hμ : HasEigenvalue T μ) : ∃ i : Fin n, hT.unsortedEigenvalues hn i = μ := by

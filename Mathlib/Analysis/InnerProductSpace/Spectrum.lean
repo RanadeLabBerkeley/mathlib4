@@ -253,7 +253,7 @@ noncomputable irreducible_def eigenvalues (hT : T.IsSymmetric) (hn : Module.finr
 theorem card_filter_eigenvalues_eq (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n) {μ : 𝕜}
     (hμ : HasEigenvalue T μ) :
     Finset.card {i | hT.eigenvalues hn i = μ} = Module.finrank 𝕜 (eigenspace T μ) := by
-  rw [←hT.card_filter_unsortedEigenvalues_eq hn hμ, eigenvalues_def]
+  rw [← hT.card_filter_unsortedEigenvalues_eq hn hμ, eigenvalues_def]
   apply Finset.card_equiv (Fin.revPerm.trans (Tuple.sort (hT.unsortedEigenvalues hn)))
   simp
 

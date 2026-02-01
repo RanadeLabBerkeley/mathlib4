@@ -1088,7 +1088,7 @@ theorem DirectSum.IsInternal.subordinateOrthonormalBasis_subordinate (a : Fin n)
 private def DirectSum.IsInternal.subordinateOrthonormalBasisIndexFiberEquiv
     (hV' : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) (i : ι) :
     {a : Fin n // hV.subordinateOrthonormalBasisIndex hn a hV' = i} ≃ Fin (finrank 𝕜 (V i)) where
-  toFun a := Fin.cast (by rw [←subordinateOrthonormalBasisIndex_def, a.property])
+  toFun a := Fin.cast (by rw [← subordinateOrthonormalBasisIndex_def, a.property])
     ((hV.sigmaOrthonormalBasisIndexEquiv hn hV').symm a).snd
   invFun b := ⟨hV.sigmaOrthonormalBasisIndexEquiv hn hV' ⟨i, b⟩,
     by simp [subordinateOrthonormalBasisIndex_def]⟩

@@ -12,8 +12,6 @@ public import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 public import Mathlib.LinearAlgebra.UnitaryGroup
 public import Mathlib.Util.Superscript
 
-import Mathlib.Tactic.DepRewrite
-
 /-!
 # `L²` inner product space structure on finite products of inner product spaces
 
@@ -1092,15 +1090,8 @@ private def DirectSum.IsInternal.subordinateOrthonormalBasisIndexFiberEquiv
     ((hV.sigmaOrthonormalBasisIndexEquiv hn hV').symm a).snd
   invFun b := ⟨hV.sigmaOrthonormalBasisIndexEquiv hn hV' ⟨i, b⟩,
     by simp [subordinateOrthonormalBasisIndex_def]⟩
-  left_inv := by
-    intro ⟨a, ha⟩
-    rw [subordinateOrthonormalBasisIndex_def] at ha
-    rw! [←ha]
-    simp
-  right_inv b := by
-    ext
-    dsimp only [Fin.val_cast]
-    rw [Equiv.symm_apply_apply]
+  left_inv := by grind [subordinateOrthonormalBasisIndex_def, Fin.cast_eq_self]
+  right_inv := by grind
 
 theorem DirectSum.IsInternal.card_filter_subordinateOrthonormalBasisIndex_eq
     (hV' : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) (i : ι) :

@@ -31,14 +31,19 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 Based on the API on Mathlib/Analysis/InnerProductSpace/Positive.lean
 -/
 
+@[aesop safe apply]
 theorem IsSymmetric.conj_adjoint {T : E →ₗ[𝕜] E}
     (hT : T.IsSymmetric) (S : E →ₗ[𝕜] F) : (S ∘ₗ T ∘ₗ S.adjoint).IsSymmetric := by
-  sorry
+  rw [LinearMap.IsSymmetric]
+  intro x y
+  rw [← adjoint_inner_right (S ∘ₗ T ∘ₗ S.adjoint)]
+  simp [hT.adjoint_eq]
 
 theorem isSymmetric_self_comp_adjoint :
     (T ∘ₗ adjoint T).IsSymmetric := by
   simpa using LinearMap.IsSymmetric.id.conj_adjoint T
 
+@[aesop safe apply]
 theorem IsSymmetric.adjoint_conj {T : E →ₗ[𝕜] E}
     (hT : T.IsSymmetric) (S : F →ₗ[𝕜] E) : (S.adjoint ∘ₗ T ∘ₗ S).IsSymmetric := by
   simpa using hT.conj_adjoint S.adjoint

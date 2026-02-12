@@ -598,11 +598,7 @@ where `LinearMap.IsSymmetric` is defined because they depend on the adjoint. -/
 
 @[aesop safe apply]
 theorem IsSymmetric.conj_adjoint {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (S : E →ₗ[𝕜] F) :
-    (S ∘ₗ T ∘ₗ S.adjoint).IsSymmetric := by
-  rw [LinearMap.IsSymmetric]
-  intro x y
-  rw [← adjoint_inner_right (S ∘ₗ T ∘ₗ S.adjoint)]
-  simp [hT.adjoint_eq]
+    (S ∘ₗ T ∘ₗ S.adjoint).IsSymmetric := fun _ _ ↦ by simp [← adjoint_inner_right, hT]
 
 theorem isSymmetric_self_comp_adjoint (T : E →ₗ[𝕜] F) : (T ∘ₗ adjoint T).IsSymmetric := by
   simpa using LinearMap.IsSymmetric.id.conj_adjoint T

@@ -15,6 +15,8 @@ between possibly-infinite-dimensional normed vector spaces; please see the docst
 * [Sheldon Axler, *Linear Algebra Done Right*][axler2024]
 -/
 
+public section
+
 open NNReal
 
 namespace LinearMap
@@ -26,15 +28,15 @@ variable {𝕜 : Type*} [RCLike 𝕜]
   (T : E →ₗ[𝕜] F)
 
 -- TODO: I might have a more elementary proof somewhere of this
-public theorem isSymmetric_self_comp_adjoint :
+theorem isSymmetric_self_comp_adjoint :
     (T ∘ₗ adjoint T).IsSymmetric := T.isPositive_self_comp_adjoint.isSymmetric
 
 -- LinearMap.isSymmetric_adjoint_mul_self but domain and range can be different
-public theorem isSymmetric_adjoint_comp_self
+theorem isSymmetric_adjoint_comp_self
   : (adjoint T ∘ₗ T).IsSymmetric := T.isPositive_adjoint_comp_self.isSymmetric
 
 -- TODO: Rewrite statement using one of the above
-public theorem eigenvalues_adjoint_comp_self_nonneg
+theorem eigenvalues_adjoint_comp_self_nonneg
   {n : ℕ} (hn : Module.finrank 𝕜 E = n) (i : Fin n)
   : 0 ≤ (LinearMap.isPositive_adjoint_comp_self T).isSymmetric.eigenvalues hn i := by
   apply LinearMap.IsPositive.nonneg_eigenvalues
@@ -109,7 +111,7 @@ multiple `Fin` types.
   generalization of singular values to continuous linear maps between possibly-infinite-dimensional
   normed vector spaces.
 -/
-public noncomputable def singularValues : ℕ →₀ ℝ≥0 :=
+noncomputable def singularValues : ℕ →₀ ℝ≥0 :=
   Finsupp.embDomain Fin.valEmbedding <|
     Finsupp.ofSupportFinite
       -- TODO: Consider using `NNReal.sqrt` and pushing the coercion inside.
@@ -123,36 +125,36 @@ Together with `LinearMap.singularValues_of_finrank_le`, this characterizes the s
 You probably need to use `LinearMap.eigenvalues_adjoint_comp_self_nonneg` to make effective use
 of this.
 -/
-public theorem singularValues_fin {n : ℕ} (hn : Module.finrank 𝕜 E = n) (i : Fin n)
+theorem singularValues_fin {n : ℕ} (hn : Module.finrank 𝕜 E = n) (i : Fin n)
   : T.singularValues i = Real.toNNReal √(T.isSymmetric_adjoint_comp_self.eigenvalues hn i) := by
   subst hn
   exact Finsupp.embDomain_apply_self _ _ i
 
-public theorem singularValues_of_lt {n : ℕ} (hn : Module.finrank 𝕜 E = n) {i : ℕ} (hi : i < n)
+theorem singularValues_of_lt {n : ℕ} (hn : Module.finrank 𝕜 E = n) {i : ℕ} (hi : i < n)
     : T.singularValues i = Real.toNNReal √(T.isSymmetric_adjoint_comp_self.eigenvalues hn ⟨i, hi⟩)
     := T.singularValues_fin hn ⟨i, hi⟩
 
-public theorem singularValues_of_finrank_le {i : ℕ}
+theorem singularValues_of_finrank_le {i : ℕ}
   (hi : Module.finrank 𝕜 E ≤ i) : T.singularValues i = 0 := by
   apply Finsupp.embDomain_notin_range
   simp [hi]
 
-public theorem sq_singularValues_fin {n : ℕ} (hn : Module.finrank 𝕜 E = n) (i : Fin n)
+theorem sq_singularValues_fin {n : ℕ} (hn : Module.finrank 𝕜 E = n) (i : Fin n)
   : T.singularValues i ^ 2 = T.isSymmetric_adjoint_comp_self.eigenvalues hn i := by
   simp [T.singularValues_fin hn, T.eigenvalues_adjoint_comp_self_nonneg hn]
 
-public theorem sq_singularValues_of_lt {n : ℕ} (hn : Module.finrank 𝕜 E = n) {i : ℕ} (hi : i < n)
+theorem sq_singularValues_of_lt {n : ℕ} (hn : Module.finrank 𝕜 E = n) {i : ℕ} (hi : i < n)
   : T.singularValues i ^ 2 = T.isSymmetric_adjoint_comp_self.eigenvalues hn ⟨i, hi⟩ := by
   exact T.sq_singularValues_fin hn ⟨i, hi⟩
 
-public theorem hasEigenvalue_adjoint_comp_self_sq_singularValues
+theorem hasEigenvalue_adjoint_comp_self_sq_singularValues
   {n : ℕ} (hn : n < Module.finrank 𝕜 E)
   : Module.End.HasEigenvalue (adjoint T ∘ₗ T) ((T.singularValues n).toReal ^ 2) := by
   have hT := T.isSymmetric_adjoint_comp_self
   convert hT.hasEigenvalue_eigenvalues rfl ⟨n, hn⟩ using 1
   simp [← T.sq_singularValues_fin]
 
-public theorem singularValues_antitone : Antitone T.singularValues := by
+theorem singularValues_antitone : Antitone T.singularValues := by
   intro i j hij
   by_cases! hi : Module.finrank 𝕜 E ≤ i
   · rw [T.singularValues_of_finrank_le hi, T.singularValues_of_finrank_le (hi.trans hij)]
@@ -168,7 +170,7 @@ public theorem singularValues_antitone : Antitone T.singularValues := by
 are only dim(domain(T)) singular values in [axler2024], so we modify the statement to account for
 this.
 -/
-public theorem injective_theorem : Function.Injective T
+theorem injective_theorem : Function.Injective T
     ↔ 0 ∉ (Finset.range (Module.finrank 𝕜 E)).image T.singularValues  := by
   have := (adjoint T ∘ₗ T).not_hasEigenvalue_zero_tfae.out 0 4
   rw [←injective_adjoint_comp_self_iff, ←ker_eq_bot, ←this, not_iff_not, Finset.mem_image]
@@ -188,7 +190,7 @@ public theorem injective_theorem : Function.Injective T
 -- 3. From 2., 0 appears as a singular value `dim(ker(T*T))` (= `n - rank(T*T)`) times
 -- 4. From 3., the number of positive singular values is `rank(T*T) = rank(T)`
 -- 5. From 4. and the fact that singular values are antitone, the following two theroems follow
-public theorem singularValues_lt_rank {n : ℕ}
+theorem singularValues_lt_rank {n : ℕ}
   (hn : n < Module.finrank 𝕜 (range T)) : 0 < T.singularValues n := by
   -- range(T) to range(T^*T)
   rw [← Module.finrank_range_adjoint, ← range_adjoint_comp_self] at hn
@@ -228,17 +230,17 @@ public theorem singularValues_lt_rank {n : ℕ}
 -- It's unclear what the right way to state "The rank of T, as a natural number" is,
 -- I went with this approach simply because it appeared more times in Loogle, but maybe
 -- `Cardinal.toNat T.rank` is better.
-public theorem singularValues_rank
+theorem singularValues_rank
   : T.singularValues (Module.finrank 𝕜 (range T)) = 0 := by
   -- Potentially requires proof by cases on whether T is full-rank?
   sorry
 
-public theorem singularValues_le_rank {n : ℕ}
+theorem singularValues_le_rank {n : ℕ}
   (hn : Module.finrank 𝕜 (range T) ≤ n) : T.singularValues n = 0 :=
   le_antisymm (T.singularValues_rank ▸ T.singularValues_antitone hn) (zero_le _)
 
 @[simp]
-public theorem support_singularValues
+theorem support_singularValues
   : T.singularValues.support = Finset.range (Module.finrank 𝕜 (range T)) := by
   ext n
   simp only [Finsupp.mem_support_iff, Finset.mem_range]
@@ -254,10 +256,10 @@ theorem singularValues_zero (i : ℕ) : (0 : E →ₗ[𝕜] F).singularValues i 
   apply singularValues_le_rank
   trans 0 <;> simp
 
-public theorem singularValues_id_apply_of_lt_finrank {i : ℕ} (hi : i < Module.finrank 𝕜 E)
+theorem singularValues_id_apply_of_lt_finrank {i : ℕ} (hi : i < Module.finrank 𝕜 E)
   : (LinearMap.id : E →ₗ[𝕜] E).singularValues i = 1 := sorry
 
-public theorem singularValues_id_apply {i : ℕ} :
+theorem singularValues_id_apply {i : ℕ} :
   (LinearMap.id : E →ₗ[𝕜] E).singularValues i = if i < Module.finrank 𝕜 E then 1 else 0 := by
   split_ifs with h
   · exact singularValues_id_apply_of_lt_finrank h
@@ -265,7 +267,7 @@ public theorem singularValues_id_apply {i : ℕ} :
     exact singularValues_of_finrank_le id h
 
 @[simp]
-public theorem singularValues_smul (c : 𝕜) (i : ℕ)
+theorem singularValues_smul (c : 𝕜) (i : ℕ)
   : (c • T).singularValues i = ‖c‖ * T.singularValues i := by
   -- This one might require some facts about complex numbers
   sorry

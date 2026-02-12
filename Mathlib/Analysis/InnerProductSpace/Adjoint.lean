@@ -593,25 +593,23 @@ theorem isAdjointPair_inner (A : E →ₗ[𝕜] F) :
   simp [adjoint_inner_left]
 
 @[aesop safe apply]
-theorem IsSymmetric.conj_adjoint {T : E →ₗ[𝕜] E}
-    (hT : T.IsSymmetric) (S : E →ₗ[𝕜] F) : (S ∘ₗ T ∘ₗ S.adjoint).IsSymmetric := by
+theorem IsSymmetric.conj_adjoint {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (S : E →ₗ[𝕜] F) :
+    (S ∘ₗ T ∘ₗ S.adjoint).IsSymmetric := by
   rw [LinearMap.IsSymmetric]
   intro x y
   rw [← adjoint_inner_right (S ∘ₗ T ∘ₗ S.adjoint)]
   simp [hT.adjoint_eq]
 
-theorem isSymmetric_self_comp_adjoint (T : E →ₗ[𝕜] F) :
-    (T ∘ₗ adjoint T).IsSymmetric := by
+theorem isSymmetric_self_comp_adjoint (T : E →ₗ[𝕜] F) : (T ∘ₗ adjoint T).IsSymmetric := by
   simpa using LinearMap.IsSymmetric.id.conj_adjoint T
 
 @[aesop safe apply]
-theorem IsSymmetric.adjoint_conj {T : E →ₗ[𝕜] E}
-    (hT : T.IsSymmetric) (S : F →ₗ[𝕜] E) : (S.adjoint ∘ₗ T ∘ₗ S).IsSymmetric := by
+theorem IsSymmetric.adjoint_conj {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) (S : F →ₗ[𝕜] E) :
+    (S.adjoint ∘ₗ T ∘ₗ S).IsSymmetric := by
   simpa using hT.conj_adjoint S.adjoint
 
 -- LinearMap.isSymmetric_adjoint_mul_self but domain and range can be different
-theorem isSymmetric_adjoint_comp_self (T : E →ₗ[𝕜] F) :
-    (adjoint T ∘ₗ T).IsSymmetric := by
+theorem isSymmetric_adjoint_comp_self (T : E →ₗ[𝕜] F) : (adjoint T ∘ₗ T).IsSymmetric := by
   simpa using LinearMap.IsSymmetric.id.adjoint_conj T
 
 /-- The Gram operator T†T is symmetric. -/

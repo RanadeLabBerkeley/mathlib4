@@ -46,16 +46,10 @@ theorem eigenvalues_adjoint_comp_self_nonneg
 7.64(b) in [axler2024].
 -/
 lemma ker_adjoint_comp_self : ker (adjoint T ∘ₗ T) = ker T := by
-  apply le_antisymm
-  · intro v hv
-    have := calc
-      ‖T v‖ ^ 2 = ⟪T v, T v⟫_𝕜 := (inner_self_eq_norm_sq_to_K (T v)).symm
-      _ = ⟪(adjoint T ∘ₗ T) v, v⟫_𝕜 := (adjoint_inner_left T v (T v)).symm
-      _ = ⟪0, v⟫_𝕜 := by rw [hv]
-      _ = 0 := inner_zero_left v
-    simp_all
-  · intro v hv
-    simp_all
+  apply le_antisymm <;> intro v hv
+  · rw [mem_ker, comp_apply] at hv
+    rw [mem_ker, ← inner_self_eq_zero (𝕜 := 𝕜), ← adjoint_inner_left, hv, inner_zero_left]
+  · aesop
 
 lemma injective_adjoint_comp_self_iff
   : Function.Injective (adjoint T ∘ₗ T) ↔ Function.Injective T := by

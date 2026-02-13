@@ -27,31 +27,13 @@ variable {𝕜 : Type*} [RCLike 𝕜]
   {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
   (T : E →ₗ[𝕜] F)
 
-/-
-Based on the API on Mathlib/Analysis/InnerProductSpace/Positive.lean
--/
-
-@[aesop safe apply]
-theorem IsSymmetric.conj_adjoint {T : E →ₗ[𝕜] E}
-    (hT : T.IsSymmetric) (S : E →ₗ[𝕜] F) : (S ∘ₗ T ∘ₗ S.adjoint).IsSymmetric := by
-  rw [LinearMap.IsSymmetric]
-  intro x y
-  rw [← adjoint_inner_right (S ∘ₗ T ∘ₗ S.adjoint)]
-  simp [hT.adjoint_eq]
-
+-- Will become available in #35174
 theorem isSymmetric_self_comp_adjoint :
-    (T ∘ₗ adjoint T).IsSymmetric := by
-  simpa using LinearMap.IsSymmetric.id.conj_adjoint T
+    (T ∘ₗ adjoint T).IsSymmetric := sorry
 
-@[aesop safe apply]
-theorem IsSymmetric.adjoint_conj {T : E →ₗ[𝕜] E}
-    (hT : T.IsSymmetric) (S : F →ₗ[𝕜] E) : (S.adjoint ∘ₗ T ∘ₗ S).IsSymmetric := by
-  simpa using hT.conj_adjoint S.adjoint
-
--- LinearMap.isSymmetric_adjoint_mul_self but domain and range can be different
+-- Will become available in #35174
 theorem isSymmetric_adjoint_comp_self :
-    (adjoint T ∘ₗ T).IsSymmetric := by
-  simpa using LinearMap.IsSymmetric.id.adjoint_conj T
+    (adjoint T ∘ₗ T).IsSymmetric := by sorry
 
 -- TODO: Rewrite statement using one of the above
 theorem eigenvalues_adjoint_comp_self_nonneg

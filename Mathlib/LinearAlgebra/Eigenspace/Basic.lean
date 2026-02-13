@@ -67,7 +67,7 @@ variable {K R : Type v} {V M : Type w} [CommRing R] [AddCommGroup M] [Module R M
 
 /-- The submodule `genEigenspace f μ k` for a linear map `f`, a scalar `μ`,
 and a number `k : ℕ∞` is the kernel of `(f - μ • id) ^ k` if `k` is a natural number,
-or the union of all these kernels if `k = ∞`. (`k = ∞` corresponds to Def 8.19 of [axler2024]).
+or the union of all these kernels if `k = ∞`. (`k = ∞` corresponds to Def 8.19 of [axler2024].)
 A generalized eigenspace for some exponent `k` is contained in
 the generalized eigenspace for exponents larger than `k`. -/
 def genEigenspace (f : End R M) (μ : R) : ℕ∞ →o Submodule R M where

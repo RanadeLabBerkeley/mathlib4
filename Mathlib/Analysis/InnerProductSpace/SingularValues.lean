@@ -233,19 +233,23 @@ theorem finrank_range_adjoint_comp_self :
     rw [range_adjoint_comp_self, Module.finrank_range_adjoint]
 
 -- 5. From 4. and the fact that singular values are antitone, the following two theroems follow
-
+-- We have this: singularValues_antitone
 
 theorem singularValues_lt_rank {n : ℕ}
   (hn : n < Module.finrank 𝕜 (range T)) : 0 < T.singularValues n := by
   rw [← Module.finrank_range_adjoint, ← range_adjoint_comp_self] at hn
-  have hn' : n < Module.finrank 𝕜 E := by
-    calc n < Module.finrank 𝕜 (range (adjoint T ∘ₗ T)) := hn
-    _ ≤ Module.finrank 𝕜 E := Submodule.finrank_le _
-  have hT := T.isSymmetric_adjoint_comp_self.hasEigenvalue_eigenvalues rfl ⟨n, hn'⟩
-  have haa := IsSymmetric.card_filter_eigenvalues_eq T.isSymmetric_adjoint_comp_self rfl hT
+  by_cases h : Module.End.HasEigenvalue (adjoint T ∘ₗ T) (0 : 𝕜)
+  · sorry
+  · sorry
 
 
-  unfold singularValues
+
+  -- have hn' : n < Module.finrank 𝕜 E := by
+  --   calc n < Module.finrank 𝕜 (range (adjoint T ∘ₗ T)) := hn
+  --   _ ≤ Module.finrank 𝕜 E := Submodule.finrank_le _
+  -- have hT := T.isSymmetric_adjoint_comp_self.hasEigenvalue_eigenvalues rfl ⟨n, hn'⟩
+  -- have haa := IsSymmetric.card_filter_eigenvalues_eq T.isSymmetric_adjoint_comp_self rfl hT
+
 
   -- have Finset.card {i : Fin n | hT.eigenvalues hn i = μ}
 

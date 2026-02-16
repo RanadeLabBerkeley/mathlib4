@@ -194,17 +194,60 @@ public theorem injective_theorem : Function.Injective T
       simp [hz, ←T.sq_singularValues_of_lt rfl (Finset.mem_range.mp h)]]
     exact T.isSymmetric_adjoint_comp_self.hasEigenvalue_eigenvalues rfl ⟨i, Finset.mem_range.mp h⟩
 
--- Roadmap for next two theorems:
--- 1. μ appears in (T*T).eigenvalues a number of times equal to the dimension of the eigenspace of μ
--- 2. From 1., 0 appears in (T*T).eigenvalues a number of times equal to dim(ker(T))
+
+-- Step 1: Prove that any eigenvalue μ of T*T appears in the eigenvalues list
+-- a number of times equal to the dimension of its eigenspace
+theorem card_eigenvalues_eq_finrank_eigenspace (μ : 𝕜)
+    (hμ : Module.End.HasEigenvalue (adjoint T ∘ₗ T) μ) {n : ℕ} (hn : Module.finrank 𝕜 E = n) :
+    Finset.card {i : Fin n | T.isSymmetric_adjoint_comp_self.eigenvalues hn i = μ}
+    = Module.finrank 𝕜 (Module.End.eigenspace (adjoint T ∘ₗ T) μ) := by
+  exact IsSymmetric.card_filter_eigenvalues_eq T.isSymmetric_adjoint_comp_self hn hμ
+
+
+-- Step 2: From 1., 0 appears in (T*T).eigenvalues a number of times equal to dim(ker(T))
+theorem card_zero_eigenvalues_eq_finrank_ker {n : ℕ} (hn : Module.finrank 𝕜 E = n)
+(hμ : Module.End.HasEigenvalue (adjoint T ∘ₗ T) (0 : 𝕜)) :
+    Finset.card {i : Fin n | T.isSymmetric_adjoint_comp_self.eigenvalues hn i = (0 : 𝕜)}
+    = Module.finrank 𝕜 (ker T) := by
+    rw [IsSymmetric.card_filter_eigenvalues_eq T.isSymmetric_adjoint_comp_self hn hμ,
+      Module.End.eigenspace_zero, ker_adjoint_comp_self]
+  -- have h : Module.End.eigenspace (adjoint T ∘ₗ T) 0 = (adjoint T ∘ₗ T).ker := by
+  --   simp [Module.End.eigenspace_def]
+  -- have h2 : (adjoint T ∘ₗ T).ker = ker T := by
+  --   simp [ker_adjoint_comp_self]
+  -- have h3 : Finset.card {i : Fin n | T.isSymmetric_adjoint_comp_self.eigenvalues hn i = (0 : 𝕜)}
+  -- = Module.finrank 𝕜 (Module.End.eigenspace (adjoint T ∘ₗ T) (0 : 𝕜)) := by
+  --   exact IsSymmetric.card_filter_eigenvalues_eq T.isSymmetric_adjoint_comp_self hn hμ
+  -- rw [h, h2] at h3
+  -- exact h3
+
 -- 3. From 2., 0 appears as a singular value `dim(ker(T*T))` (= `n - rank(T*T)`) times
+theorem finrank_ker_adjoint_comp_self {n : ℕ} (hn : Module.finrank 𝕜 E = n) :
+  Module.finrank 𝕜 (ker (adjoint T ∘ₗ T)) = n - Module.finrank 𝕜 (range (adjoint T ∘ₗ T)) := by
+    rw [← hn, ← LinearMap.finrank_range_add_finrank_ker (adjoint T ∘ₗ T)]
+    omega
+
 -- 4. From 3., the number of positive singular values is `rank(T*T) = rank(T)`
+theorem finrank_range_adjoint_comp_self :
+  Module.finrank 𝕜 (range (adjoint T ∘ₗ T)) = Module.finrank 𝕜 (range T) := by
+    rw [range_adjoint_comp_self, Module.finrank_range_adjoint]
+
 -- 5. From 4. and the fact that singular values are antitone, the following two theroems follow
 
-public theorem singularValues_lt_rank {n : ℕ}
+
+theorem singularValues_lt_rank {n : ℕ}
   (hn : n < Module.finrank 𝕜 (range T)) : 0 < T.singularValues n := by
-  -- First use that rank(T) = range(T*T) then apply reasoning above
-  sorry
+  rw [← Module.finrank_range_adjoint, ← range_adjoint_comp_self] at hn
+  have hn' : n < Module.finrank 𝕜 E := by
+    calc n < Module.finrank 𝕜 (range (adjoint T ∘ₗ T)) := hn
+    _ ≤ Module.finrank 𝕜 E := Submodule.finrank_le _
+  have hT := T.isSymmetric_adjoint_comp_self.hasEigenvalue_eigenvalues rfl ⟨n, hn'⟩
+  have haa := IsSymmetric.card_filter_eigenvalues_eq T.isSymmetric_adjoint_comp_self rfl hT
+
+
+  unfold singularValues
+
+  -- have Finset.card {i : Fin n | hT.eigenvalues hn i = μ}
 
 -- It's unclear what the right way to state "The rank of T, as a natural number" is,
 -- I went with this approach simply because it appeared more times in Loogle, but maybe

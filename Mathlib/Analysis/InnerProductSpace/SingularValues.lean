@@ -234,13 +234,24 @@ theorem finrank_range_adjoint_comp_self :
 
 -- 5. From 4. and the fact that singular values are antitone, the following two theroems follow
 -- We have this: singularValues_antitone
+-- singularValues_antitone : Antitone T.singularValues
 
 theorem singularValues_lt_rank {n : ℕ}
   (hn : n < Module.finrank 𝕜 (range T)) : 0 < T.singularValues n := by
-  rw [← Module.finrank_range_adjoint, ← range_adjoint_comp_self] at hn
-  by_cases h : Module.End.HasEigenvalue (adjoint T ∘ₗ T) (0 : 𝕜)
-  · sorry
-  · sorry
+    rw [← Module.finrank_range_adjoint, ← range_adjoint_comp_self] at hn
+    have hn' : n < Module.finrank 𝕜 E := by
+      calc n < Module.finrank 𝕜 (range (adjoint T ∘ₗ T)) := hn
+      _ ≤ Module.finrank 𝕜 E := Submodule.finrank_le _
+    by_cases h : Module.End.HasEigenvalue (adjoint T ∘ₗ T) (0 : 𝕜)
+    · sorry
+    · have hpos : 0 < T.isSymmetric_adjoint_comp_self.eigenvalues rfl ⟨n, hn'⟩ := by
+        refine lt_of_le_of_ne' (T.eigenvalues_adjoint_comp_self_nonneg rfl ⟨n, hn'⟩) ?_
+        intro hzero
+        apply h
+        simpa [hzero] using T.isSymmetric_adjoint_comp_self.hasEigenvalue_eigenvalues rfl ⟨n, hn'⟩
+      have hsq : 0 < (T.singularValues n : ℝ) ^ 2 := by
+        simpa [T.sq_singularValues_of_lt rfl hn'] using hpos
+      simpa using Real.sqrt_pos.mpr hsq
 
 
 

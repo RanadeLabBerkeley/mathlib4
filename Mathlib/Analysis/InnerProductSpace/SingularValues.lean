@@ -227,6 +227,13 @@ theorem finrank_ker_adjoint_comp_self {n : ℕ} (hn : Module.finrank 𝕜 E = n)
     rw [← hn, ← LinearMap.finrank_range_add_finrank_ker (adjoint T ∘ₗ T)]
     omega
 
+
+omit [FiniteDimensional 𝕜 F] in
+theorem finrank_comp_self {n : ℕ} (hn : Module.finrank 𝕜 E = n) :
+  Module.finrank 𝕜 (ker T) = n - Module.finrank 𝕜 (range T) := by
+    rw [← hn, ← LinearMap.finrank_range_add_finrank_ker T]
+    omega
+
 -- 4. From 3., the number of positive singular values is `rank(T*T) = rank(T)`
 theorem finrank_range_adjoint_comp_self :
   Module.finrank 𝕜 (range (adjoint T ∘ₗ T)) = Module.finrank 𝕜 (range T) := by
@@ -242,16 +249,25 @@ theorem singularValues_lt_rank {n : ℕ}
     have hn' : n < Module.finrank 𝕜 E := by
       calc n < Module.finrank 𝕜 (range (adjoint T ∘ₗ T)) := hn
       _ ≤ Module.finrank 𝕜 E := Submodule.finrank_le _
-    by_cases h : Module.End.HasEigenvalue (adjoint T ∘ₗ T) (0 : 𝕜)
-    · sorry
-    · have hpos : 0 < T.isSymmetric_adjoint_comp_self.eigenvalues rfl ⟨n, hn'⟩ := by
-        refine lt_of_le_of_ne' (T.eigenvalues_adjoint_comp_self_nonneg rfl ⟨n, hn'⟩) ?_
-        intro hzero
-        apply h
+    have hpos : 0 < T.isSymmetric_adjoint_comp_self.eigenvalues rfl ⟨n, hn'⟩ := by
+      refine lt_of_le_of_ne' (T.eigenvalues_adjoint_comp_self_nonneg rfl ⟨n, hn'⟩) ?_
+      intro hzero
+      by_cases h : Module.End.HasEigenvalue (adjoint T ∘ₗ T) (0 : 𝕜)
+      ·
+        have h2 := card_zero_eigenvalues_eq_finrank_ker T rfl h
+        have h3 := finrank_comp_self T rfl
+        rw [h3] at h2
+        have h5 : Module.finrank 𝕜 E - Module.finrank 𝕜 T.range = 0 := by
+          have := Nat.sub_eq_zero_of_le (le_of_lt hn)
+        have h4 : Module.finrank 𝕜 T.ker = 0 := by simp [h3, h5]
+
+        omega
+      · apply h
         simpa [hzero] using T.isSymmetric_adjoint_comp_self.hasEigenvalue_eigenvalues rfl ⟨n, hn'⟩
-      have hsq : 0 < (T.singularValues n : ℝ) ^ 2 := by
-        simpa [T.sq_singularValues_of_lt rfl hn'] using hpos
-      simpa using Real.sqrt_pos.mpr hsq
+    have hsq : 0 < (T.singularValues n : ℝ) ^ 2 := by
+      simpa [T.sq_singularValues_of_lt rfl hn'] using hpos
+    simpa using Real.sqrt_pos.mpr hsq
+
 
 
 

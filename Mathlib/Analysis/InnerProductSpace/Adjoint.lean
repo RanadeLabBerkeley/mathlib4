@@ -215,6 +215,10 @@ theorem ker_adjoint_comp_self (T : E →L[𝕜] F) : (T† ∘L T).ker = T.ker :
       inner_zero_left]
   · aesop
 
+lemma adjoint_comp_self_injective_iff (T : E →L[𝕜] F) :
+    Function.Injective (T† ∘L T) ↔ Function.Injective T := by
+  rw [← coe_coe, ← LinearMap.ker_eq_bot, ← coe_coe, ← LinearMap.ker_eq_bot, ker_adjoint_comp_self]
+
 /-- `E →L[𝕜] E` is a star algebra with the adjoint as the star operation. -/
 instance : Star (E →L[𝕜] E) :=
   ⟨adjoint⟩
@@ -571,6 +575,10 @@ lemma ker_adjoint_comp_self (A : E →ₗ[𝕜] F) : (A.adjoint ∘ₗ A).ker = 
   haveI := FiniteDimensional.complete 𝕜 E
   haveI := FiniteDimensional.complete 𝕜 F
   simpa using A.toContinuousLinearMap.ker_adjoint_comp_self
+
+lemma adjoint_comp_self_injective_iff (A : E →ₗ[𝕜] F) :
+    Function.Injective (A.adjoint ∘ₗ A) ↔ Function.Injective A := by
+  rw [← ker_eq_bot, ← ker_eq_bot, ker_adjoint_comp_self]
 
 /-- The adjoint is unique: a map `A` is the adjoint of `B` iff it satisfies `⟪A x, y⟫ = ⟪x, B y⟫`
 for all basis vectors `x` and `y`. -/

@@ -88,11 +88,9 @@ theorem finrank_range_adjoint :
     Module.finrank 𝕜 (range T) = Module.finrank 𝕜 (ker (adjoint T))ᗮ := by
       rw [orthogonal_ker, adjoint_adjoint]
     _ = Module.finrank 𝕜 F - Module.finrank 𝕜 (ker (adjoint T)) := by
-      rw [← (ker (adjoint T)).finrank_add_finrank_orthogonal]
-      simp
+      simp [← (ker (adjoint T)).finrank_add_finrank_orthogonal]
     _ = Module.finrank 𝕜 (range (adjoint T)) := by
-      rw [← (adjoint T).finrank_range_add_finrank_ker]
-      simp
+      simp [← (adjoint T).finrank_range_add_finrank_ker]
 
 /--
 The singular values of a finite dimensional linear map, ordered in descending order.

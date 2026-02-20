@@ -81,7 +81,7 @@ lemma range_adjoint_comp_self : range (adjoint T ∘ₗ T) = range (adjoint T) :
 /--
 Part of 7.64(d) from [axler2024].
 -/
-theorem _root_.Module.finrank_range_adjoint :
+theorem finrank_range_adjoint :
     Module.finrank 𝕜 (range (adjoint T)) = Module.finrank 𝕜 (range T) := by
   symm
   calc

@@ -37,6 +37,10 @@ finite-dimensional spaces.
 * The continuous conjugate-linear version `adjointAux` is only an intermediate
   definition and is not meant to be used outside this file.
 
+## References
+
+* [Sheldon Axler, *Linear Algebra Done Right*][axler2024]
+
 ## Tags
 
 adjoint
@@ -542,14 +546,14 @@ theorem adjoint_id : (LinearMap.id (R := 𝕜) (M := E)).adjoint = LinearMap.id 
 
 /-- 7.6(b) from [axler2024].
 See `ContinuousLinearMap.orthogonal_ker` for the infinite-dimensional version. -/
-lemma orthogonal_ker (A : E →ₗ[𝕜] F) : (ker A)ᗮ = range (adjoint A) := by
+lemma orthogonal_ker (A : E →ₗ[𝕜] F) : A.kerᗮ = A.adjoint.range := by
   haveI := FiniteDimensional.complete 𝕜 E
   haveI := FiniteDimensional.complete 𝕜 F
   simpa using A.toContinuousLinearMap.orthogonal_ker
 
 /-- 7.6(a) from [axler2024].
 See `ContinuousLinearMap.orthogonal_range` for the infinite-dimensional version. -/
-lemma orthogonal_range (A : E →ₗ[𝕜] F) : (range A)ᗮ = ker (adjoint A) := by
+lemma orthogonal_range (A : E →ₗ[𝕜] F) : A.rangeᗮ = A.adjoint.ker := by
   haveI := FiniteDimensional.complete 𝕜 E
   haveI := FiniteDimensional.complete 𝕜 F
   simpa using A.toContinuousLinearMap.orthogonal_range

@@ -56,9 +56,19 @@ lemma injective_adjoint_comp_self_iff
   repeat rw [←LinearMap.ker_eq_bot]
   rw [ker_adjoint_comp_self]
 
--- TODO: Prove using ContinuousLinearMap.orthogonal_range
+/-- 7.6(b) from [axler2024].
+See `ContinuousLinearMap.orthogonal_ker` for the infinite-dimensional version. -/
 lemma orthogonal_ker : (ker T)ᗮ = range (adjoint T) := by
-  sorry
+  haveI := FiniteDimensional.complete 𝕜 E
+  haveI := FiniteDimensional.complete 𝕜 F
+  simpa using T.toContinuousLinearMap.orthogonal_ker
+
+/-- 7.6(a) from [axler2024].
+See `ContinuousLinearMap.orthogonal_range` for the infinite-dimensional version. -/
+lemma orthogonal_range : (range T)ᗮ = ker (adjoint T) := by
+  haveI := FiniteDimensional.complete 𝕜 E
+  haveI := FiniteDimensional.complete 𝕜 F
+  simpa using T.toContinuousLinearMap.orthogonal_range
 
 -- TODO: Place after LinearMap.IsSymmetric.orthogonal_ker
 lemma IsSymmetric.orthogonal_ker {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) : (ker T)ᗮ = range T := by

@@ -580,6 +580,23 @@ lemma adjoint_comp_self_injective_iff (A : E →ₗ[𝕜] F) :
     Function.Injective (A.adjoint ∘ₗ A) ↔ Function.Injective A := by
   rw [← ker_eq_bot, ← ker_eq_bot, ker_adjoint_comp_self]
 
+/-- 7.64(c) in [axler2024]. -/
+lemma range_adjoint_comp_self (A : E →ₗ[𝕜] F) : (A.adjoint ∘ₗ A).range = A.adjoint.range :=
+  calc
+    (A.adjoint ∘ₗ A).range = (A.adjoint ∘ₗ A).kerᗮ := by simp [orthogonal_ker]
+    _ = A.adjoint.range := by rw [ker_adjoint_comp_self, orthogonal_ker]
+
+/-- Part of 7.64(d) in [axler2024]. -/
+theorem finrank_range_adjoint (A : E →ₗ[𝕜] F) :
+    Module.finrank 𝕜 A.adjoint.range = Module.finrank 𝕜 A.range := by
+  symm
+  calc
+    Module.finrank 𝕜 A.range = Module.finrank 𝕜 A.adjoint.kerᗮ := by
+      rw [orthogonal_ker, adjoint_adjoint]
+    _ = Module.finrank 𝕜 F - Module.finrank 𝕜 A.adjoint.ker := by
+      simp [← A.adjoint.ker.finrank_add_finrank_orthogonal]
+    _ = Module.finrank 𝕜 A.adjoint.range := by simp [← A.adjoint.finrank_range_add_finrank_ker]
+
 /-- The adjoint is unique: a map `A` is the adjoint of `B` iff it satisfies `⟪A x, y⟫ = ⟪x, B y⟫`
 for all basis vectors `x` and `y`. -/
 theorem eq_adjoint_iff_basis {ι₁ : Type*} {ι₂ : Type*} (b₁ : Basis ι₁ 𝕜 E) (b₂ : Basis ι₂ 𝕜 F)

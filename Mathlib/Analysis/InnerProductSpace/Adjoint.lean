@@ -540,6 +540,20 @@ theorem IsSymmetric.adjoint_eq {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) :
 theorem adjoint_id : (LinearMap.id (R := 𝕜) (M := E)).adjoint = LinearMap.id := by
   simp
 
+/-- 7.6(b) from [axler2024].
+See `ContinuousLinearMap.orthogonal_ker` for the infinite-dimensional version. -/
+lemma orthogonal_ker (A : E →ₗ[𝕜] F) : (ker A)ᗮ = range (adjoint A) := by
+  haveI := FiniteDimensional.complete 𝕜 E
+  haveI := FiniteDimensional.complete 𝕜 F
+  simpa using A.toContinuousLinearMap.orthogonal_ker
+
+/-- 7.6(a) from [axler2024].
+See `ContinuousLinearMap.orthogonal_range` for the infinite-dimensional version. -/
+lemma orthogonal_range (A : E →ₗ[𝕜] F) : (range A)ᗮ = ker (adjoint A) := by
+  haveI := FiniteDimensional.complete 𝕜 E
+  haveI := FiniteDimensional.complete 𝕜 F
+  simpa using A.toContinuousLinearMap.orthogonal_range
+
 /-- The adjoint is unique: a map `A` is the adjoint of `B` iff it satisfies `⟪A x, y⟫ = ⟪x, B y⟫`
 for all basis vectors `x` and `y`. -/
 theorem eq_adjoint_iff_basis {ι₁ : Type*} {ι₂ : Type*} (b₁ : Basis ι₁ 𝕜 E) (b₂ : Basis ι₂ 𝕜 F)

@@ -73,16 +73,26 @@ lemma orthogonal_range : (range T)ᗮ = ker (adjoint T) := by
 /--
 7.64(c) in [axler2024].
 -/
-lemma range_adjoint_comp_self : range (adjoint T ∘ₗ T) = range (adjoint T) := by
+lemma range_adjoint_comp_self : range (adjoint T ∘ₗ T) = range (adjoint T) :=
   calc
     range (adjoint T ∘ₗ T) = (ker (adjoint T ∘ₗ T))ᗮ := by simp [orthogonal_ker]
     _ = range (adjoint T) := by rw [ker_adjoint_comp_self, orthogonal_ker]
 
 /--
-Part of 7.64(d) from [axler2024]. See also `Module.finrank_range_adjoint_comp_self`.
+Part of 7.64(d) from [axler2024].
 -/
 theorem _root_.Module.finrank_range_adjoint :
-    Module.finrank 𝕜 (range (adjoint T)) = Module.finrank 𝕜 (range T) := sorry
+    Module.finrank 𝕜 (range (adjoint T)) = Module.finrank 𝕜 (range T) := by
+  symm
+  calc
+    Module.finrank 𝕜 (range T) = Module.finrank 𝕜 (ker (adjoint T))ᗮ := by
+      rw [orthogonal_ker, adjoint_adjoint]
+    _ = Module.finrank 𝕜 F - Module.finrank 𝕜 (ker (adjoint T)) := by
+      rw [← (ker (adjoint T)).finrank_add_finrank_orthogonal]
+      simp
+    _ = Module.finrank 𝕜 (range (adjoint T)) := by
+      rw [← (adjoint T).finrank_range_add_finrank_ker]
+      simp
 
 /--
 The singular values of a finite dimensional linear map, ordered in descending order.

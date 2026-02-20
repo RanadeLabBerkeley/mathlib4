@@ -70,19 +70,13 @@ lemma orthogonal_range : (range T)ᗮ = ker (adjoint T) := by
   haveI := FiniteDimensional.complete 𝕜 F
   simpa using T.toContinuousLinearMap.orthogonal_range
 
--- TODO: Place after LinearMap.IsSymmetric.orthogonal_ker
-lemma IsSymmetric.orthogonal_ker {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) : (ker T)ᗮ = range T := by
-  simp [←hT.orthogonal_range]
-
 /--
 7.64(c) in [axler2024].
 -/
-lemma range_adjoint_comp_self : range (adjoint T ∘ₗ T) = range (adjoint T) :=
+lemma range_adjoint_comp_self : range (adjoint T ∘ₗ T) = range (adjoint T) := by
   calc
-    range (adjoint T ∘ₗ T) = (ker (adjoint T ∘ₗ T))ᗮ :=
-      T.isSymmetric_adjoint_comp_self.orthogonal_ker.symm
-    _ = (ker T)ᗮ := by rw [ker_adjoint_comp_self]
-    _ = range (adjoint T) := T.orthogonal_ker
+    range (adjoint T ∘ₗ T) = (ker (adjoint T ∘ₗ T))ᗮ := by simp [orthogonal_ker]
+    _ = range (adjoint T) := by rw [ker_adjoint_comp_self, orthogonal_ker]
 
 /--
 Part of 7.64(d) from [axler2024]. See also `Module.finrank_range_adjoint_comp_self`.

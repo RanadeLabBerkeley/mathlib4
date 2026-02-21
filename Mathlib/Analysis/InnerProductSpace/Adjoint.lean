@@ -209,11 +209,9 @@ theorem ker_le_ker_iff_range_le_range [FiniteDimensional 𝕜 E] {T U : E →L[�
 
 /-- Infinite-dimensional version of 7.64(b) in [axler2024]. -/
 theorem ker_adjoint_comp_self (T : E →L[𝕜] F) : (T† ∘L T).ker = T.ker := by
-  apply le_antisymm <;> intro v hv
-  · rw [LinearMap.mem_ker, coe_coe, comp_apply] at hv
-    rw [LinearMap.mem_ker, ← inner_self_eq_zero (𝕜 := 𝕜), coe_coe, ← adjoint_inner_left, hv,
-      inner_zero_left]
-  · aesop
+  refine le_antisymm (fun _ _ ↦ ?_) fun _ _ ↦ by simp_all
+  rw [LinearMap.mem_ker, ← inner_self_eq_zero (𝕜 := 𝕜), coe_coe, ← adjoint_inner_left]
+  simp_all
 
 lemma adjoint_comp_self_injective_iff (T : E →L[𝕜] F) :
     Function.Injective (T† ∘L T) ↔ Function.Injective T := by
@@ -588,14 +586,11 @@ lemma range_adjoint_comp_self (A : E →ₗ[𝕜] F) : (A.adjoint ∘ₗ A).rang
 
 /-- Part of 7.64(d) in [axler2024]. -/
 theorem finrank_range_adjoint (A : E →ₗ[𝕜] F) :
-    Module.finrank 𝕜 A.adjoint.range = Module.finrank 𝕜 A.range := by
-  symm
-  calc
-    Module.finrank 𝕜 A.range = Module.finrank 𝕜 A.adjoint.kerᗮ := by
-      rw [orthogonal_ker, adjoint_adjoint]
-    _ = Module.finrank 𝕜 F - Module.finrank 𝕜 A.adjoint.ker := by
-      simp [← A.adjoint.ker.finrank_add_finrank_orthogonal]
-    _ = Module.finrank 𝕜 A.adjoint.range := by simp [← A.adjoint.finrank_range_add_finrank_ker]
+    Module.finrank 𝕜 A.adjoint.range = Module.finrank 𝕜 A.range := Module.finrank 𝕜 A.adjoint.range = Module.finrank 𝕜 A.range := calc
+  _ = Module.finrank 𝕜 F - Module.finrank 𝕜 A.adjoint.ker := by
+    simp [← A.adjoint.finrank_range_add_finrank_ker]
+  _ = _ := by rw [← A.adjoint.ker.finrank_add_finrank_orthogonal,
+    orthogonal_ker, adjoint_adjoint]; simp
 
 /-- The adjoint is unique: a map `A` is the adjoint of `B` iff it satisfies `⟪A x, y⟫ = ⟪x, B y⟫`
 for all basis vectors `x` and `y`. -/

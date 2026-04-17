@@ -2,10 +2,11 @@ module
 
 public import Mathlib
 
-variable {R : Type*} [Semiring R] {M : Type*} [AddCommMonoid M] [Module R M]
-  {ι : Type*} [LE ι]
-
 public section
+
+variable (R : Type*) [Semiring R] {M : Type*} [AddCommMonoid M] [Module R M]
+
+open Submodule
 
 /--
 The span chain of an ordered family of vectors is the set of spans of initial segments.
@@ -21,5 +22,34 @@ This includes the spans of every finite initial list of vectors as well as the s
 sequence. In the case that `M` is a Hilbert space and `v₀, v₁, v₂, ...` is a Schauder basis, then
 taking the closure of every element in the span chain produces a nest.
 -/
-def spanChain (v : ι → M) : Set (Submodule R M) :=
-  {Submodule.span R (v '' t) | t : LowerSet ι}
+def spanChain {ι : Type*} [LE ι] (v : ι → M) : Set (Submodule R M) :=
+  {span R (v '' t) | t : LowerSet ι}
+
+theorem mem_spanChain_iff {ι : Type*} [LE ι] (v : ι → M) (N : Submodule R M) :
+    N ∈ spanChain R v ↔ ∃ t : Set ι, IsLowerSet t ∧ span R (v '' t) = N := by
+  sorry
+
+theorem span_mem_spanChain_of_isLowerSet {ι : Type*} [LE ι] (v : ι → M) {t : Set ι}
+    (ht : IsLowerSet t) : span R (v '' t) ∈ spanChain R v := by
+  rw [mem_spanChain_iff]
+  use t
+
+theorem span_image_Iio_mem_spanChain {ι : Type*} [Preorder ι] (v : ι → M) (i : ι) :
+    span R (v '' Set.Iio i) ∈ spanChain R v :=
+  span_mem_spanChain_of_isLowerSet R v (isLowerSet_Iio i)
+
+theorem span_image_Iic_mem_spanChain {ι : Type*} [Preorder ι] (v : ι → M) (i : ι) :
+    span R (v '' Set.Iic i) ∈ spanChain R v :=
+  span_mem_spanChain_of_isLowerSet R v (isLowerSet_Iic i)
+
+theorem bot_mem_spanChain {ι : Type*} [LE ι] (v : ι → M) : ⊥ ∈ spanChain R v := by
+  simpa [spanChain] using Set.mem_range_self (f := fun t : LowerSet ι ↦ span R (v '' t))
+    ⟨∅, isLowerSet_empty⟩
+
+theorem span_range_mem_spanChain {ι : Type*} [LE ι] (v : ι → M) :
+    span R (Set.range v) ∈ spanChain R v := by
+  sorry
+
+theorem isChain_spanChain {ι : Type*} [LinearOrder ι] (v : ι → M) :
+    IsChain (· ≤ ·) (spanChain R v) :=
+  sorry

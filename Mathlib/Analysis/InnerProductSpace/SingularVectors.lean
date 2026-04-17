@@ -53,3 +53,10 @@ theorem span_range_mem_spanChain {ι : Type*} [LE ι] (v : ι → M) :
 theorem isChain_spanChain {ι : Type*} [LinearOrder ι] (v : ι → M) :
     IsChain (· ≤ ·) (spanChain R v) :=
   sorry
+
+/--
+If `F` is a chain of submodules of `M` (or a partial flag), then an ordered family `v : ι → M`
+is adapted to `F` iff ...
+-/
+structure IsAdaptedFamily {ι : Type*} [LE ι] (v : ι → M) (F : Set (Submodule R M)) where
+  subset_spanChain : F ⊆ spanChain R v

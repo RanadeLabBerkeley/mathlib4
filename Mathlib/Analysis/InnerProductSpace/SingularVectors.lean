@@ -88,8 +88,8 @@ Note that the lists of singular vectors are allowed to continue on forever.
 structure IsSingularValueDecomposition (T : V →ₗ[𝕜] U) (u : ℕ → U) (v : ℕ → V) : Prop where
   -- This sum is always finite since T.singularValues eventually terminates
   decomposition : T = ∑ᶠ i, (T.singularValues i : 𝕜) • rankOne 𝕜 (u i) (v i)
-  orthogonal_right (i j : ℕ) : ⟪v i, v j⟫_𝕜 = 0
-  orthogonal_left (i j : ℕ) : ⟪u i, u j⟫_𝕜 = 0
+  orthogonal_right {i j : ℕ} : i ≠ j → ⟪v i, v j⟫_𝕜 = 0
+  orthogonal_left {i j : ℕ} : i ≠ j → ⟪u i, u j⟫_𝕜 = 0
 
 noncomputable def LinearMap.stdRightSingularVectors (T : V →ₗ[𝕜] U) : ℕ →₀ V :=
   Finsupp.embDomain Fin.valEmbedding <|

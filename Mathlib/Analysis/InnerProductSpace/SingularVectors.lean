@@ -73,7 +73,7 @@ structure IsAdaptedFamily {ι : Type*} [LE ι] (v : ι → M) (F : Set (Submodul
 end modules
 section inner_product
 
-open InnerProductSpace
+open Module InnerProductSpace
 
 variable {𝕜 : Type*} [RCLike 𝕜]
   {V : Type*} [NormedAddCommGroup V] [InnerProductSpace 𝕜 V] [FiniteDimensional 𝕜 V]
@@ -85,11 +85,19 @@ def stdAdaptedOthonormalBasis {F : Set (Submodule 𝕜 V)} (hF : IsChain (· ≤
 /--
 Note that the lists of singular vectors are allowed to continue on forever.
 -/
-structure IsSingularValueDecomposition (T : V →ₗ[𝕜] U) (u : ℕ → U) (v : ℕ → V) : Prop where
+structure LinearMap.SingularValueDecomposition (T : V →ₗ[𝕜] U) (u : ℕ → U) (v : ℕ → V) : Prop where
   -- This sum is always finite since T.singularValues eventually terminates
   decomposition : T = ∑ᶠ i, (T.singularValues i : 𝕜) • rankOne 𝕜 (u i) (v i)
   orthogonal_right {i j : ℕ} : i ≠ j → ⟪v i, v j⟫_𝕜 = 0
   orthogonal_left {i j : ℕ} : i ≠ j → ⟪u i, u j⟫_𝕜 = 0
+  norm_right (i : ℕ) : ‖v i‖ = 1
+  norm_left (i : ℕ) : ‖u i‖ = 1
+
+def SingularValueDecomposition.ofEqOn {T : V →ₗ[𝕜] U} {u : ℕ → U} {v : ℕ → V}
+    (hT : T.SingularValueDecomposition u v) {u' : ℕ → U} {v' : ℕ → V}
+    (hu : Set.Iio (finrank 𝕜 T.range) |>.EqOn u u')
+    (hv : Set.Iio (finrank 𝕜 T.range) |>.EqOn v v') : T.SingularValueDecomposition u' v' := by
+  sorry
 
 noncomputable def LinearMap.stdRightSingularVectors (T : V →ₗ[𝕜] U) : ℕ →₀ V :=
   Finsupp.embDomain Fin.valEmbedding <|

@@ -4,6 +4,8 @@ public import Mathlib
 
 public section
 
+section modules
+
 variable (R : Type*) [Semiring R] {M : Type*} [AddCommMonoid M] [Module R M]
 
 open Submodule
@@ -68,5 +70,19 @@ structure IsAdaptedFamily {ι : Type*} [LE ι] (v : ι → M) (F : Set (Submodul
 --def IsAdaptedFamily.completion {v : ℕ → M} {F : Set (Submodule R M)}
 --  (h : IsAdaptedFamily R v F) : Unit := ()
 
-def stdAdaptedOthonormalBasis {F : Set (Submodule R M)} (hF : IsChain (· ≤ ·) F)
-  : Fin (Module.finrank R M) → M := sorry
+end modules
+section inner_product
+
+open InnerProductSpace
+
+variable (𝕜 : Type*) [RCLike 𝕜]
+  {V : Type*} [NormedAddCommGroup V] [InnerProductSpace 𝕜 V] [FiniteDimensional 𝕜 V]
+  {U : Type*} [NormedAddCommGroup U] [InnerProductSpace 𝕜 U] [FiniteDimensional 𝕜 U]
+
+def stdAdaptedOthonormalBasis {F : Set (Submodule 𝕜 V)} (hF : IsChain (· ≤ ·) F)
+  : Fin (Module.finrank 𝕜 V) → V := sorry
+
+structure IsSingularValueDecomposition (T : V →ₗ[𝕜] U) (v : ℕ →₀ V) (u : ℕ →₀ U) : Prop where
+  decomposition : T = ∑ᶠ i, (T.singularValues i : 𝕜) • rankOne 𝕜 (u i) (v i)
+
+end inner_product

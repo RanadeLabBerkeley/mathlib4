@@ -103,4 +103,8 @@ noncomputable def LinearMap.stdMinimalLeftSingularVectors (T : V →ₗ[𝕜] U)
 
 -- stdLeftSingularVectors
 
+-- Should be able to derive that the stdLeft is singular values from the stdMinimal using the fact
+-- that changing u and v on the parts where either the singular values are zero or the other is zero
+-- doesn't affect it
+
 end inner_product

@@ -22,6 +22,7 @@ This includes the spans of every finite initial list of vectors as well as the s
 sequence. In the case that `M` is a Hilbert space and `v₀, v₁, v₂, ...` is a Schauder basis, then
 taking the closure of every element in the span chain produces a nest.
 -/
+-- TODO: Should this be a `Sublattice` or some other bundled type?
 def spanChain {ι : Type*} [LE ι] (v : ι → M) : Set (Submodule R M) :=
   {span R (v '' t) | t : LowerSet ι}
 
@@ -54,9 +55,18 @@ theorem isChain_spanChain {ι : Type*} [LinearOrder ι] (v : ι → M) :
     IsChain (· ≤ ·) (spanChain R v) :=
   sorry
 
+-- Goal: Establish a relationship between orthogonal families and chains
+
 /--
 If `F` is a chain of submodules of `M` (or a partial flag), then an ordered family `v : ι → M`
 is adapted to `F` iff ...
 -/
 structure IsAdaptedFamily {ι : Type*} [LE ι] (v : ι → M) (F : Set (Submodule R M)) where
-  subset_spanChain : F ⊆ spanChain R v
+  -- TODO: F and spanChain are comparable
+  -- subset_spanChain : F ⊆ spanChain R v
+
+--def IsAdaptedFamily.completion {v : ℕ → M} {F : Set (Submodule R M)}
+--  (h : IsAdaptedFamily R v F) : Unit := ()
+
+def stdAdaptedOthonormalBasis {F : Set (Submodule R M)} (hF : IsChain (· ≤ ·) F)
+  : Fin (Module.finrank R M) → M := sorry

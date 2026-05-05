@@ -12,9 +12,6 @@ variable {𝕜 : Type*} [RCLike 𝕜]
   {V : Type*} [NormedAddCommGroup V] [InnerProductSpace 𝕜 V] [FiniteDimensional 𝕜 V]
   {U : Type*} [NormedAddCommGroup U] [InnerProductSpace 𝕜 U] [FiniteDimensional 𝕜 U]
 
-def stdAdaptedOthonormalBasis {F : Set (Submodule 𝕜 V)} (hF : IsChain (· ≤ ·) F)
-  : Fin (Module.finrank 𝕜 V) → V := sorry
-
 /--
 Note that the lists of singular vectors are allowed to continue on forever.
 -/
@@ -26,11 +23,25 @@ structure LinearMap.SingularValueDecomposition (T : V →ₗ[𝕜] U) (u : ℕ �
   norm_right (i : ℕ) : ‖v i‖ = 1
   norm_left (i : ℕ) : ‖u i‖ = 1
 
-def SingularValueDecomposition.ofEqOn {T : V →ₗ[𝕜] U} {u : ℕ → U} {v : ℕ → V}
+theorem LinearMap.SingularValueDecomposition.adjoint {T : V →ₗ[𝕜] U} {u : ℕ → U} {v : ℕ → V}
+    (hT : T.SingularValueDecomposition u v) : T.adjoint.SingularValueDecomposition v u := sorry
+
+theorem LinearMap.SingularValueDecomposition.right_eqOn {T : V →ₗ[𝕜] U} {u : ℕ → U} {v : ℕ → V}
+    (hT : T.SingularValueDecomposition u v) {v' : ℕ → V}
+    (hv : Set.Iio (finrank 𝕜 T.range) |>.EqOn v v') : T.SingularValueDecomposition u v' := by
+  sorry
+
+theorem LinearMap.SingularValueDecomposition.left_eqOn {T : V →ₗ[𝕜] U} {u : ℕ → U} {v : ℕ → V}
+    (hT : T.SingularValueDecomposition u v) {u' : ℕ → U}
+    (hu : Set.Iio (finrank 𝕜 T.range) |>.EqOn u u') : T.SingularValueDecomposition u' v := by
+  rw [← finrank_range_adjoint] at hu
+  simpa using hT.adjoint.right_eqOn hu |>.adjoint
+
+theorem SingularValueDecomposition.eqOn {T : V →ₗ[𝕜] U} {u : ℕ → U} {v : ℕ → V}
     (hT : T.SingularValueDecomposition u v) {u' : ℕ → U} {v' : ℕ → V}
     (hu : Set.Iio (finrank 𝕜 T.range) |>.EqOn u u')
-    (hv : Set.Iio (finrank 𝕜 T.range) |>.EqOn v v') : T.SingularValueDecomposition u' v' := by
-  sorry
+    (hv : Set.Iio (finrank 𝕜 T.range) |>.EqOn v v') : T.SingularValueDecomposition u' v' :=
+  hT.right_eqOn hv |>.left_eqOn hu
 
 noncomputable def LinearMap.stdRightSingularVectors (T : V →ₗ[𝕜] U) : ℕ →₀ V :=
   Finsupp.embDomain Fin.valEmbedding <|

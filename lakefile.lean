@@ -64,6 +64,13 @@ lean_lib Mathlib where
   -- Enforce Mathlib's default linters and style options.
   leanOptions := mathlibLeanOptions
 
+/-- Standalone library housing the EDHOC formalisation of Section 3 of
+arXiv:2007.11427v3 (under `EDHOC/`).  The submodules glob picks up every
+`EDHOC.*` file (including `EDHOC.Tamarin.*`) so new modules are added by
+simply dropping a `.lean` file under `EDHOC/`. -/
+lean_lib EDHOC where
+  globs := #[.submodules `EDHOC]
+
 -- NB. When adding further libraries, check if they should be excluded from `getLeanLibs` in
 -- `scripts/mk_all.lean`.
 lean_lib Cache

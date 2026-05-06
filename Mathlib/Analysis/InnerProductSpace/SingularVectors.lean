@@ -22,8 +22,11 @@ structure SingularValueDecomposition (T : V →ₗ[𝕜] U) (u : ℕ → U) (v :
   decomposition : T = ∑ᶠ i, (T.singularValues i : 𝕜) • rankOne 𝕜 (u i) (v i)
   orthogonal_right {i j : ℕ} : i ≠ j → ⟪v i, v j⟫_𝕜 = 0
   orthogonal_left {i j : ℕ} : i ≠ j → ⟪u i, u j⟫_𝕜 = 0
-  norm_right (i : ℕ) : ‖v i‖ = 1
-  norm_left (i : ℕ) : ‖u i‖ = 1
+  -- This might allow for "gaps" in certian cases.
+  -- TODO: Figure out if this actually happens, which means determine what the minimum support of
+  -- u and v is. Maybe support(u) ⊆ Iio (rank T) is forced.
+  norm_right {i : ℕ} : v i ≠ 0 → ‖v i‖ = 1
+  norm_left (i : ℕ) : v i ≠ 0 → ‖u i‖ = 1
 
 theorem SingularValueDecomposition.adjoint {T : V →ₗ[𝕜] U} {u : ℕ → U} {v : ℕ → V}
     (hT : T.SingularValueDecomposition u v) : T.adjoint.SingularValueDecomposition v u := sorry
@@ -45,10 +48,14 @@ theorem SingularValueDecomposition.eqOn {T : V →ₗ[𝕜] U} {u : ℕ → U} {
     (hv : Set.Iio (finrank 𝕜 T.range) |>.EqOn v v') : T.SingularValueDecomposition u' v' :=
   hT.right_eqOn hv |>.left_eqOn hu
 
-noncomputable def stdRightSingularVectors (T : V →ₗ[𝕜] U) : ℕ →₀ V :=
+noncomputable def stdFullRightSingularVectors (T : V →ₗ[𝕜] U) : ℕ →₀ V :=
   Finsupp.embDomain Fin.valEmbedding <|
     (Finsupp.ofSupportFinite (T.isSymmetric_adjoint_comp_self.eigenvectorBasis rfl))
     (Set.toFinite _)
+
+-- TODO: Upgrade to Finsupp
+-- Idea: multiply by indicator function?
+noncomputable def stdCompactRightSingularVectors (T : V →ₗ[𝕜] U) : ℕ → V := sorry
 
 noncomputable def stdMinimalLeftSingularVectors (T : V →ₗ[𝕜] U) : ℕ →₀ U where
   support := sorry

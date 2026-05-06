@@ -48,25 +48,34 @@ theorem SingularValueDecomposition.eqOn {T : V →ₗ[𝕜] U} {u : ℕ → U} {
     (hv : Set.Iio (finrank 𝕜 T.range) |>.EqOn v v') : T.SingularValueDecomposition u' v' :=
   hT.right_eqOn hv |>.left_eqOn hu
 
+-- TODO: Consider splitting off what's inside the embDomain into a separate function
 noncomputable def stdFullRightSingularVectors (T : V →ₗ[𝕜] U) : ℕ →₀ V :=
   Finsupp.embDomain Fin.valEmbedding <|
     (Finsupp.ofSupportFinite (T.isSymmetric_adjoint_comp_self.eigenvectorBasis rfl))
     (Set.toFinite _)
 
--- TODO: Upgrade to Finsupp
--- Idea: multiply by indicator function?
-noncomputable def stdCompactRightSingularVectors (T : V →ₗ[𝕜] U) : ℕ → V := sorry
+noncomputable def stdCompactRightSingularVectors (T : V →ₗ[𝕜] U) : ℕ →₀ V :=
+  T.stdFullRightSingularVectors.filter (· < finrank 𝕜 T.range)
 
-noncomputable def stdMinimalLeftSingularVectors (T : V →ₗ[𝕜] U) : ℕ →₀ U where
+noncomputable def stdCompactLeftSingularVectors (T : V →ₗ[𝕜] U) : ℕ →₀ U where
   support := sorry
-  toFun (i : ℕ) := (1 / (T.singularValues i : 𝕜)) • T (T.stdRightSingularVectors i)
+  toFun (i : ℕ) := (1 / (T.singularValues i : 𝕜)) • T (T.stdCompactRightSingularVectors i)
   mem_support_toFun := sorry
 
--- stdLeftSingularVectors
+-- TODO: Rename
+private theorem helper (T : V →ₗ[𝕜] U)
+  : Orthonormal 𝕜 <|
+      (Set.Iio ⟨finrank 𝕜 T.range, sorry⟩).restrict
+      (fun i : Fin (finrank 𝕜 U) => T.stdCompactLeftSingularVectors i) := sorry
 
--- Should be able to derive that the stdLeft is singular values from the stdMinimal using the fact
--- that changing u and v on the parts where either the singular values are zero or the other is zero
--- doesn't affect it
+noncomputable def stdFullLeftSingularVectors (T : V →ₗ[𝕜] U) : ℕ →₀ U :=
+  let x := Classical.choose <| T.helper.exists_orthonormalBasis_extension_of_card_eq
+    (Fintype.card_fin _).symm
+  Finsupp.embDomain Fin.valEmbedding <|
+    (Finsupp.ofSupportFinite x)
+    (Set.toFinite _)
+
+-- Should be able to derive that the stdLeft is singular values from the stdCompact using eqOn
 
 end LinearMap
 end inner_product

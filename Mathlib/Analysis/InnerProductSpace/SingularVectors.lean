@@ -26,7 +26,7 @@ structure SingularValueDecomposition (T : V →ₗ[𝕜] U) (u : ℕ → U) (v :
   -- TODO: Figure out if this actually happens, which means determine what the minimum support of
   -- u and v is. Maybe support(u) ⊆ Iio (rank T) is forced.
   norm_right {i : ℕ} : v i ≠ 0 → ‖v i‖ = 1
-  norm_left (i : ℕ) : v i ≠ 0 → ‖u i‖ = 1
+  norm_left (i : ℕ) : u i ≠ 0 → ‖u i‖ = 1
 
 theorem SingularValueDecomposition.adjoint {T : V →ₗ[𝕜] U} {u : ℕ → U} {v : ℕ → V}
     (hT : T.SingularValueDecomposition u v) : T.adjoint.SingularValueDecomposition v u := sorry

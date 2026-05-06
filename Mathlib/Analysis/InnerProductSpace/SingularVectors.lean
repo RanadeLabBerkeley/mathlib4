@@ -48,11 +48,25 @@ theorem SingularValueDecomposition.eqOn {T : V →ₗ[𝕜] U} {u : ℕ → U} {
     (hv : Set.Iio (finrank 𝕜 T.range) |>.EqOn v v') : T.SingularValueDecomposition u' v' :=
   hT.right_eqOn hv |>.left_eqOn hu
 
+/-
+There are three definitions of right singular vectors:
+- `LinearMap.stdRightSingularOrthnormalBasis` - Singular vectors as an orthnormal basis
+- `LinearMap.stdRightFullSingularVectors` - Same as `LinearMap.stdRightSingularOrthonormalBasis`,
+but as a sequence `ℕ → V` which is eventually zero
+- `LinearMap.stdRightCompactSingularVectors` - Same as `LinearMap.stdRightFullSingularVectors`, but
+truncated to the first `rank(T)`.
+
+Similarly, there are
+- `LinearMap.stdLeftSingularOrthnormalBasis`
+- `LinearMap.stdLeftFullSingularVectors`
+- `LinearMap.stdLeftCompactSingularVectors`
+for the left singular vectors.
+-/
+
 noncomputable def stdRightSingularOrthonormalBasis (T : V →ₗ[𝕜] U) :
     OrthonormalBasis (Fin (finrank 𝕜 V)) 𝕜 V :=
   T.isSymmetric_adjoint_comp_self.eigenvectorBasis rfl
 
--- TODO: Consider splitting off what's inside the embDomain into a separate function
 noncomputable def stdRightFullSingularVectors (T : V →ₗ[𝕜] U) : ℕ →₀ V :=
   Finsupp.embDomain Fin.valEmbedding <|
     (Finsupp.ofSupportFinite T.stdRightSingularOrthonormalBasis)

@@ -91,12 +91,24 @@ noncomputable def stdLeftSingularOrthonormalBasis (T : V →ₗ[𝕜] U) :
   Classical.choose <| T.helper.exists_orthonormalBasis_extension_of_card_eq
     (Fintype.card_fin _).symm
 
-noncomputable def stdFullLeftSingularVectors (T : V →ₗ[𝕜] U) : ℕ →₀ U :=
+noncomputable def stdLeftFullSingularVectors (T : V →ₗ[𝕜] U) : ℕ →₀ U :=
   Finsupp.embDomain Fin.valEmbedding <|
     (Finsupp.ofSupportFinite T.stdLeftSingularOrthonormalBasis)
     (Set.toFinite _)
 
 -- Should be able to derive that the stdLeft is singular values from the stdCompact using eqOn
+
+/-
+Main singular value decomposition theorems
+-/
+
+theorem full_singularValueDecomposition (T : V →ₗ[𝕜] U) :
+    T.SingularValueDecomposition T.stdLeftFullSingularVectors T.stdRightFullSingularVectors :=
+  sorry
+
+theorem compact_singularValueDecomposition (T : V →ₗ[𝕜] U) :
+    T.SingularValueDecomposition T.stdLeftCompactSingularVectors T.stdRightCompactSingularVectors :=
+  sorry
 
 end LinearMap
 end inner_product
